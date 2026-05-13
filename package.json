@@ -1,0 +1,41 @@
+{
+  "name": "sora-view-lite",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --open",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node build/index.js",
+    "clean": "node ./scripts/clean-install-state.js",
+    "reinstall": "npm run clean && npm install --no-audit --no-fund",
+    "sora:extract-links": "node ./bin/sora-extract-permalinks.js",
+    "sora:dedupe": "node ./bin/sora-dedupe-links.js",
+    "sora:fetch": "node ./bin/sora-fetch-html.js",
+    "sora:extract": "node ./bin/sora-extract-html.js",
+    "sora:download": "node ./bin/sora-download-assets.js",
+    "sora:process": "node ./bin/sora-process-html.js",
+    "sora:refresh-all": "node ./bin/sora-refresh-all.js",
+    "sora:install-playwright": "npm install playwright && npx playwright install chromium"
+  },
+  "dependencies": {
+    "better-sqlite3": "12.8.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-node": "5.5.4",
+    "@sveltejs/kit": "2.59.0",
+    "@sveltejs/vite-plugin-svelte": "7.0.0",
+    "svelte": "5.55.5",
+    "vite": "8.0.10"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "optionalDependencies": {
+    "@duckdb/node-api": "latest",
+    "duckdb": "latest",
+    "playwright": "^1.59.1"
+  }
+}

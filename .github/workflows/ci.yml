@@ -1,0 +1,42 @@
+name: ci
+
+# Triggers: every push to the main branch, and every pull request opened
+# against it. PRs from forks run in their own sandbox so they can't read
+# repository secrets — fine for us, we don't have any.
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Match the engines field in package.json. setup-node will install
+      # the requested version and put it on PATH for subsequent steps.
+      # The `cache: npm` flag caches ~/.npm between runs based on
+      # package-lock.json — usually shaves a minute off the install.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # `npm ci` is the lockfile-strict installer — it errors if
+      # package-lock.json and package.json don't agree, and never
+      # mutates the lockfile mid-install. Safer than `npm install`
+      # for CI.
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      # svelte-check catches Svelte template / accessibility / type
+      # errors that the Vite build alone doesn't surface.
+      - name: Type & template check
+        run: npx svelte-check --output human
+
+      # Full production build. Fails on any unresolved imports, broken
+      # SSR code, or Svelte compile errors. This is the strongest
+      # signal that the app would actually start.
+      - name: Build
+        run: npm run build

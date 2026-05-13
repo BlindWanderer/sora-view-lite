@@ -1,0 +1,71 @@
+MIT License
+
+Copyright (c) 2026 Sora View Lite contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+--------------------------------------------------------------------------------
+THIRD-PARTY COMPONENTS
+--------------------------------------------------------------------------------
+
+This project includes branding and visual assets originally from OpenAI's
+Sora platform, retained for historical preservation and visual continuity
+for users browsing their personal archives. These assets are NOT licensed
+under the MIT license above — all rights to them remain with their
+respective owners (OpenAI). They are used in good faith and for personal,
+non-commercial archival viewing.
+
+Affected files:
+
+  static/favicon.ico                  Sora favicon
+  static/sora-cloud.svg               Sora cloud mascot, used in the theme toggle
+  static/sora-icon.webp               Sora app icon
+  static/sora-icon-transparent.webp   Sora app icon (transparent variant)
+
+If you are a rights holder for any of these assets and would prefer they be
+removed or replaced with neutral equivalents, please open a GitHub issue
+on this repository and we will swap them promptly.
+
+This project is not affiliated with, endorsed by, or sponsored by OpenAI.
+"Sora" is a trademark of OpenAI.
+
+Note on static/sora-stars.png: the starfield background used by the Sora
+theme is an AI-generated image created for this project to evoke the look
+of Sora's post-shutdown mobile UI. It is NOT an OpenAI asset; it is
+distributed under the MIT license above with the rest of the project.
+
+
+--------------------------------------------------------------------------------
+OPEN-SOURCE DEPENDENCIES
+--------------------------------------------------------------------------------
+
+Sora View Lite depends on a number of open-source packages distributed under
+their own licenses. See package.json for the complete list and node_modules/
+for each package's bundled LICENSE file after npm install. Notable runtime
+dependencies include:
+
+  SvelteKit                Sebastian Stege & contributors        MIT
+  better-sqlite3           Joshua Wise                           MIT
+  DuckDB / @duckdb/node-api  DuckDB Foundation                   MIT
+  Playwright (optional)    Microsoft                             Apache-2.0
+  qrcode                   Ryan Day                              MIT
+
+The build tooling (Vite, Rollup, esbuild, etc.) is similarly MIT / Apache-2.0
+licensed. See node_modules/<package>/LICENSE for the canonical text.

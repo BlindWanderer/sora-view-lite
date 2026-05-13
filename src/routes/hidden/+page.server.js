@@ -1,0 +1,3 @@
+import { getHiddenVideos } from '$lib/db.js';
+import { collectPages, readPageParam } from '$lib/server/paging.js';
+export async function load({ url }) { const page=readPageParam(url); const {videos,hasMore}=await collectPages(p=>getHiddenVideos(p), page); return {videos,page,hasMore}; }

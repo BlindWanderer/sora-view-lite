@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# macOS launcher for Sora View Lite production mode.
+# Double-click this file. If macOS asks about permissions, allow it in System Settings > Privacy & Security.
+
+cd "$(dirname "$0")"
+set -euo pipefail
+
+export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin"
+
+HOST="${HOST:-127.0.0.1}"
+PORT="${PORT:-5173}"
+if [ "$HOST" = "127.0.0.1" ] && [ -f config.json ]; then
+  HOST="$(node -e "const fs=require('fs');try{const c=JSON.parse(fs.readFileSync('config.json','utf8'));process.stdout.write(c.serverAccessMode==='lan'?'0.0.0.0':'127.0.0.1')}catch{process.stdout.write('127.0.0.1')}")"
+fi
+URL="http://localhost:${PORT}"
+
+printf '\n================================\n'
+printf '       Sora View Lite\n'
+printf '       Production Mode\n'
+printf '================================\n\n'
+
+if ! command -v node >/dev/null 2>&1; then
+  osascript -e 'display alert "Node.js not found" message "Please install Node.js 20.19+ or 22.12+ from https://nodejs.org and try again."'
+  exit 1
+fi
+
+if ! node -e "const [maj,min]=process.versions.node.split('.').map(Number); process.exit((maj > 22 || (maj === 22 && min >= 12) || (maj === 20 && min >= 19)) ? 0 : 1)"; then
+  echo "ERROR: Sora View Lite requires Node.js 20.19+ or 22.12+."
+  echo "Current Node.js version: $(node --version)"
+  read -r -p "Press Return to close..."
+  exit 1
+fi
+
+echo "Node: $(node --version)"
+echo
+
+if ! command -v npm >/dev/null 2>&1; then
+  osascript -e 'display alert "npm not found" message "Please reinstall Node.js with npm included."'
+  exit 1
+fi
+
+echo "Checking dependencies..."
+npm install --no-audit --no-fund
+
+echo
+echo "Building production app..."
+npm run build
+
+echo
+echo "Starting Sora View Lite at ${URL}"
+echo "Bind host: ${HOST}"
+echo "Leave this terminal open while using the app."
+echo "Press Ctrl+C to stop the server."
+echo
+
+(sleep 2 && open "${URL}") &
+
+export NODE_ENV=production
+export HOST
+export PORT
+export ORIGIN="${URL}"
+npm run start

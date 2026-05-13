@@ -1,0 +1,14 @@
+{
+  "archivePath": "./sora-vault",
+  "dbPath": "./sora-vault/sora.db",
+  "dbEngine": "sqlite",
+  "manifestMode": "unknown",
+  "appPort": 5173,
+  "personInitialLimit": 100,
+  "personLoadLimit": 250,
+  "personIndexInfo": "minimal",
+  "personShowImages": false,
+  "serverAccessMode": "local",
+  "showFullPaths": true,
+  "mobileFeedLayout": "auto"
+}

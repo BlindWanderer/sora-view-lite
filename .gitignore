@@ -1,0 +1,79 @@
+# Dependencies
+node_modules/
+jspm_packages/
+
+# SvelteKit / Vite build output
+.svelte-kit/
+build/
+dist/
+.vite/
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+
+# App config (user-local; commit config.example.json instead)
+config.json
+config.json.*
+
+# Claude Code session state (per-user, per-machine)
+.claude/
+
+# Runtime data (logs, caches, generated assets)
+.sora-view-lite/
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local databases
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-journal
+
+# Native module build artifacts
+build/Release/
+*.node
+prebuilds/
+
+# Backups / scratch
+*.bak
+*.backup
+*.old
+*.orig
+*.tmp
+
+# Archives (project distributables shouldn't be tracked)
+*.7z
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Editors / IDEs
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.shared.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+
+# TypeScript incremental build info
+*.tsbuildinfo

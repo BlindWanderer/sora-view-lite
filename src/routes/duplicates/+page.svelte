@@ -1,0 +1,4 @@
+<script>export let data;</script>
+<svelte:head><title>Duplicate candidates — Sora View Lite</title></svelte:head>
+<div class="page-wrap"><header class="page-header"><h1 class="page-title">Duplicate candidates</h1><p class="subtitle">Safe duplicate hints based on repeated generation IDs or post IDs. Nothing is deleted automatically.</p></header><section class="panel">{#if data.duplicates.length}{#each data.duplicates as d}<div class="dup"><strong>{d.n}×</strong><code>{d.reason}: {d.match_key}</code></div>{/each}{:else}<p>No obvious duplicate candidates found.</p>{/if}</section></div>
+<style>.page-wrap{padding:16px 16px 90px}.subtitle{color:var(--text-secondary);font-size:14px}.panel{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:16px}.dup{display:flex;gap:12px;align-items:center;padding:10px;border-bottom:1px solid var(--border)}code{overflow-wrap:anywhere}</style>

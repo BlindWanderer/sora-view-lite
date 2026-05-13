@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Sora">
+  <defs>
+    <linearGradient id="cloud" x1="16" y1="8" x2="48" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.58" stop-color="#dff3ff"/>
+      <stop offset="1" stop-color="#7fc7ff"/>
+    </linearGradient>
+    <linearGradient id="eye" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#134988"/>
+      <stop offset="1" stop-color="#082e63"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.4" stdDeviation="1.1" flood-color="#001f3f" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <path filter="url(#softShadow)" fill="url(#cloud)" stroke="#e9f8ff" stroke-width="2.2" stroke-linejoin="round" d="M18.5 50.5c-8.1 0-14.5-6.3-14.5-14.2 0-6.5 4.4-12.1 10.4-13.8C17 13.2 25.2 7 34.8 7c8.2 0 15.2 4.5 18.7 11.2 5.9 1.1 10.5 6.3 10.5 12.6 0 6.9-5.4 12.6-12.2 12.9-2.5 7.7-9.8 13.3-18.3 13.3-6.3 0-11.9-3-15.4-7.6-.2.7-.8 1.1-1.6 1.1z" transform="scale(.9) translate(3.6 3.1)"/>
+  <ellipse cx="24.1" cy="32.9" rx="6.7" ry="10.1" fill="url(#eye)" stroke="#d7f2ff" stroke-width="1.6" transform="rotate(-10 24.1 32.9)"/>
+  <ellipse cx="41.1" cy="31.5" rx="6.7" ry="10.1" fill="url(#eye)" stroke="#d7f2ff" stroke-width="1.6" transform="rotate(-10 41.1 31.5)"/>
+  <path fill="#ffffff" d="M19.9 27.3l2.1 4.1 4.1 2.1-4.1 2.1-2.1 4.1-2.1-4.1-4.1-2.1 4.1-2.1 2.1-4.1zM37.2 25.5l1.7 3.2 3.2 1.7-3.2 1.7-1.7 3.2-1.7-3.2-3.2-1.7 3.2-1.7 1.7-3.2z" opacity=".96"/>
+  <circle cx="28.2" cy="38.7" r="1.4" fill="#d7f2ff"/>
+  <circle cx="45.2" cy="36.4" r="1.4" fill="#d7f2ff"/>
+</svg>
