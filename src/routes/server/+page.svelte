@@ -1131,7 +1131,7 @@ npx playwright install chromium</pre>
 
       <p class="note"><strong>Sora is no longer available.</strong> Downloads may still work for a while.</p>
 
-      <div class="kv"><span>Version</span><code>1.1.0</code></div>
+      <div class="kv"><span>Version</span><code>1.1.1</code></div>
       <div class="kv"><span>Database</span><code>{data.config.dbEngine || 'sqlite'}</code></div>
     </section>
   {/if}
