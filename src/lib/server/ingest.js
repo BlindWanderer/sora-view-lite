@@ -1356,6 +1356,24 @@ export async function ingestSoraArchive({ archivePath, dbPath, dbEngine = 'sqlit
       }
     }
 
+    // If the user dropped a sora-view-metadata.json export into the archive
+    // root, merge it on top of the scanned catalog before we close out.
+    // Skip-if-empty: function returns null when no file is present so this
+    // is free on fresh imports.
+    try {
+      emitProgress({ phase: 'metadata_import', currentFile: 'sora-view-metadata.json' });
+      const { autoImportMetadataFromArchive } = await import('./metadata-import.js');
+      const meta = await autoImportMetadataFromArchive(db, rootDir);
+      if (meta) {
+        stats.metadataImport = meta;
+        if (meta.error) {
+          emitProgress({ phase: 'warning', message: `Metadata import: ${meta.error}` });
+        }
+      }
+    } catch (e) {
+      emitProgress({ phase: 'warning', message: `Metadata import: ${e.message}` });
+    }
+
     stats.completedAt = new Date().toISOString();
     emitProgress({ phase: 'complete' });
     return stats;

@@ -23,6 +23,38 @@ let cached = null;
 let cachedAt = 0;
 const CACHE_MS = 30_000;
 
+// Which Playwright launch path worked last time:
+//   null   -> bundled chromium (default)
+//   'chrome' -> system Chrome via channel:'chrome' (fallback for Ubuntu 24/26
+//             and other hosts where Playwright's chromium libs don't run).
+let preferredChannel = null;
+
+/**
+ * Launch a headless Chromium with a fallback to the system-installed Chrome.
+ * Playwright's bundled chromium fails on Ubuntu 24.04+/26 (it ships against
+ * older system libs); when that happens, retry with `channel: 'chrome'` so
+ * we use whatever Google Chrome the user already has installed.
+ *
+ * Latches onto the working channel for the rest of the process so we don't
+ * eat the failed-launch cost on every call.
+ */
+export async function launchChromium(playwrightModule, opts = {}) {
+  const mod = playwrightModule;
+  if (preferredChannel) {
+    return mod.chromium.launch({ ...opts, headless: true, channel: preferredChannel });
+  }
+  try {
+    return await mod.chromium.launch({ ...opts, headless: true });
+  } catch (e) {
+    const browser = await mod.chromium.launch({ ...opts, headless: true, channel: 'chrome' });
+    preferredChannel = 'chrome';
+    return browser;
+  }
+}
+
+/** Returns the channel currently in use ('chrome' or null for bundled chromium). */
+export function getChromiumChannel() { return preferredChannel; }
+
 export async function checkPlaywright({ probeBrowser = true } = {}) {
   const now = Date.now();
   if (cached && (now - cachedAt) < CACHE_MS) return cached;
@@ -59,10 +91,11 @@ export async function checkPlaywright({ probeBrowser = true } = {}) {
     return cached;
   }
 
-  // Try to launch chromium briefly. If the binary isn't installed, this throws.
+  // Try to launch chromium briefly. If the binary isn't installed, this
+  // throws — we fall back to the system Chrome channel before giving up.
   let browser;
   try {
-    browser = await mod.chromium.launch({ headless: true });
+    browser = await launchChromium(mod);
     await browser.close();
   } catch (e) {
     cached = {
@@ -75,7 +108,7 @@ export async function checkPlaywright({ probeBrowser = true } = {}) {
     return cached;
   }
 
-  cached = { ok: true, version };
+  cached = { ok: true, version, channel: preferredChannel };
   cachedAt = now;
   return cached;
 }

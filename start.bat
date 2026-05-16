@@ -88,6 +88,10 @@ start "" powershell -NoProfile -WindowStyle Hidden -Command "Start-Sleep -Second
 REM Start production server in foreground
 set NODE_ENV=production
 set ORIGIN=%URL%
+REM Disable adapter-node's 512 KB body-size cap. The app is local-first
+REM and uploads JSON metadata dumps (Data & Database tab) that routinely
+REM run into the megabytes.
+set BODY_SIZE_LIMIT=Infinity
 call npm run start
 
 echo.

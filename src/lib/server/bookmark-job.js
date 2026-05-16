@@ -7,7 +7,7 @@ import { getDB, closeDB } from '$lib/db.js';
 import { extractFromHtml } from '$lib/server/refresh/extract-html.js';
 import { ingestExtractedPayload } from '$lib/server/refresh/single-ingest.js';
 import { ensureRefreshDirs } from '$lib/server/refresh/paths.js';
-import { checkPlaywright } from '$lib/server/refresh/playwright-check.js';
+import { checkPlaywright, launchChromium } from '$lib/server/refresh/playwright-check.js';
 import {
   assertAllowedAssetUrl,
   assertSafeBaseName,
@@ -336,7 +336,7 @@ const SUNSET_HINTS = ['sunset', 'no longer available'];
 
 async function fetchSingleUrl(url, htmlDir) {
   const playwright = await runtimeImport('playwright');
-  const browser = await playwright.chromium.launch({ headless: true });
+  const browser = await launchChromium(playwright);
   try {
     const context = await browser.newContext({
       javaScriptEnabled: false,

@@ -102,6 +102,27 @@
     </div>
   {/if}
 
+  {#if form?.importMetadataError}
+    <div class="error-box">Import failed: {form.importMetadataError}</div>
+  {/if}
+
+  {#if form?.importMetadata}
+    {@const im = form.importMetadata}
+    <div class="success-box">
+      <strong>Metadata imported.</strong>
+      Videos: {fmt(im.videos.total_in_json)} in JSON,
+      {fmt(im.videos.matched_on_disk)} matched on disk,
+      {fmt(im.videos.fields_filled)} empty fields filled,
+      {fmt(im.videos.orphans)} not on this machine.
+      Comments: {fmt(im.comments.total_in_json)} in JSON, {fmt(im.comments.inserted)} newly stored
+      ({fmt(im.comments.attached_to_video)} attached to videos on disk, {fmt(im.comments.orphans)} waiting for their videos).
+      Creator profiles: +{fmt(im.creator_profiles.inserted)} new, {fmt(im.creator_profiles.enriched)} enriched.
+      Character profiles: +{fmt(im.character_profiles.inserted)} new, {fmt(im.character_profiles.enriched)} enriched.
+      Cameos: +{fmt(im.cameos.inserted)}.
+      {#if im.exported_at}<br><small>Source exported {im.exported_at}.</small>{/if}
+    </div>
+  {/if}
+
   {#if activeTab === 'overview'}
     <section class="panel">
       <h2>Current setup</h2>
@@ -981,6 +1002,22 @@ npx playwright install chromium</pre>
         <a class="tool-link" href="/api/export/videos.csv">Export videos CSV</a>
         <a class="tool-link" href="/api/export/metadata.json">Export metadata JSON</a>
       </div>
+
+      <form method="POST" action="?/importMetadata" enctype="multipart/form-data" class="import-row">
+        <label class="import-label">
+          <span>Import metadata JSON</span>
+          <input type="file" name="file" accept="application/json,.json" required />
+        </label>
+        <button class="secondary-btn narrow-btn" type="submit">Import</button>
+        <small>
+          Merges an exported <code>sora-view-metadata.json</code> into the catalog.
+          Only fills in empty fields on videos that already exist on disk; never
+          overwrites existing values or local flags (favorites, hidden, reviewed).
+          Drop the file into the archive root before initial ingest to have it
+          merged automatically.
+        </small>
+      </form>
+
       <form method="POST" action="?/optimizeDatabase">
         <button class="secondary-btn narrow-btn" type="submit">Optimize database / rebuild summaries</button>
         <small>SQLite runs safe maintenance and summary refreshes. DuckDB uses batch summary rebuilds plus checkpoint/analyze when available.</small>
@@ -1142,6 +1179,10 @@ npx playwright install chromium</pre>
   .error-box { color: #f87171; background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.2); border-radius: 12px; padding: 12px; font-size: 13px; }
   .success-box { color: #16a34a; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.24); border-radius: 12px; padding: 12px; font-size: 13px; margin-top: 10px; }
   .narrow-btn { width: auto; min-width: 260px; }
+  .import-row { display:grid; gap:8px; margin-top: 12px; padding: 12px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-panel); }
+  .import-row small { color: var(--text-secondary); font-size: 12px; line-height: 1.4; }
+  .import-label { display:flex; flex-wrap: wrap; gap:10px; align-items:center; font-weight: 700; }
+  .import-label input[type="file"] { flex: 1 1 240px; font-size: 13px; }
   .warning-box { color: #fbbf24; background: rgba(251,191,36,0.10); border: 1px solid rgba(251,191,36,0.25); border-radius: 12px; padding: 12px; font-size: 13px; }
   .cancel-job-form { border: 1px solid rgba(248,113,113,0.2); border-radius: 14px; padding: 12px; display: grid; gap: 8px; max-width: 420px; }
   .progress-track { height: 10px; border-radius: 999px; background: var(--bg-panel); border: 1px solid var(--border); overflow: hidden; }

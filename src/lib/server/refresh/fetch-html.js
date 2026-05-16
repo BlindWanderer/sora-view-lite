@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { launchChromium } from './playwright-check.js';
 
 /**
  * Fetches Sora post pages as HTML using Playwright with JS disabled — the
@@ -140,7 +141,7 @@ export async function fetchHtmlBatch(opts) {
     throw new Error(`Playwright is not installed: ${e.message}`);
   }
 
-  const browser = await playwright.chromium.launch({ headless: true });
+  const browser = await launchChromium(playwright);
   let context;
   try {
     context = await browser.newContext({

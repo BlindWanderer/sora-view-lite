@@ -6,6 +6,7 @@ import { analyzePromptCharacterMentions } from '$lib/server/ingest.js';
 import { cancelAssetJob as requestAssetJobCancel, getAssetJob, startAssetJob } from '$lib/server/asset-job.js';
 import { cancelAvatarJob as requestAvatarJobCancel, getAvatarJob, startAvatarJob } from '$lib/server/avatar-job.js';
 import { reconcileAvatarRegistry } from '$lib/server/profile-fetch.js';
+import { applyMetadataImport, validateImportPayload } from '$lib/server/metadata-import.js';
 import {
   cancelRefreshJob as requestRefreshJobCancel,
   getRefreshJob,
@@ -365,6 +366,38 @@ export const actions = {
     try { clearBookmarkJob(); } catch {}
     throw redirect(303, '/server?tab=assets');
   },
+  importMetadata: async ({ request }) => {
+    const config = getConfig();
+    if (!config) throw redirect(303, '/setup');
+    const form = await request.formData();
+    const file = form.get('file');
+    if (!file || typeof file === 'string' || !file.size) {
+      return fail(400, { importMetadataError: 'Pick a JSON file to import.' });
+    }
+    // Cheap header check before slurping the whole thing into memory — keeps
+    // accidental uploads of huge unrelated files from blowing up Node.
+    const MAX_BYTES = 500 * 1024 * 1024; // 500 MB — generous for big archives
+    if (file.size > MAX_BYTES) {
+      return fail(400, { importMetadataError: `File is ${Math.round(file.size / 1024 / 1024)} MB; max is ${MAX_BYTES / 1024 / 1024} MB.` });
+    }
+    let parsed;
+    try {
+      const text = await file.text();
+      parsed = JSON.parse(text);
+    } catch (e) {
+      return fail(400, { importMetadataError: `Not valid JSON: ${e.message}` });
+    }
+    const v = validateImportPayload(parsed);
+    if (!v.ok) return fail(400, { importMetadataError: `Not a sora-view-metadata.json export: ${v.reason}` });
+    try {
+      const db = await getDB();
+      const stats = await applyMetadataImport(db, parsed);
+      return { importMetadata: stats };
+    } catch (e) {
+      return fail(500, { importMetadataError: e.message });
+    }
+  },
+
   analyzeCharacterMentions: async () => {
     const config = getConfig();
     if (!config) throw redirect(303, '/setup');

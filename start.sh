@@ -63,4 +63,8 @@ export NODE_ENV=production
 export HOST
 export PORT
 export ORIGIN="${URL}"
+# Disable adapter-node's 512 KB body-size cap. The app is local-first
+# and uploads JSON metadata dumps (Data & Database tab) that routinely
+# run into the megabytes.
+export BODY_SIZE_LIMIT="Infinity"
 npm run start
